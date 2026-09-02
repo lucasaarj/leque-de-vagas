@@ -1,10 +1,8 @@
-import { vagas } from "@/data/vagas";
 import MuralDeVagas from "@/components/MuralDeVagas";
+import listarVagas from "@/lib/api";
 
-export default function Vagas() {
-  // Continua saindo no TERMINAL: a página não virou de cliente.
-  // É a prova mais rápida de que a fronteira ficou onde você deixou.
-  console.log("[servidor] montando a listagem");
+export default async function Vagas() {
+  const vagas = await listarVagas();
 
   return (
     <>

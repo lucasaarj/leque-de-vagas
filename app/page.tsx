@@ -1,8 +1,10 @@
 import Link from "next/link";
-import { vagas } from "@/data/vagas";
 import { empresas } from "@/data/empresas";
+import listarVagas from "@/lib/api";
 
-export default function Home() {
+export default async function Home() {
+  const vagas = await listarVagas();
+
   // Duas contas no servidor. Números que a página não precisa lembrar,
   // só mostrar — então não são estado, são conta.
   const paraIniciante = vagas.filter((v) => v.aceitaIniciante).length;
