@@ -10,6 +10,7 @@ export default function Cabecalho() {
       <nav>
         <MenuLink href="/">Início</MenuLink>
         <MenuLink href="/vagas">Vagas</MenuLink>
+        <MenuLink href="/empresas">Empresas</MenuLink>
         <MenuLink href="/sobre">Sobre</MenuLink>
         <MenuLink href="/termos">Termos</MenuLink>
       </nav>

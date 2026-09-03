@@ -1,26 +1,29 @@
 import Link from "next/link";
-import { empresas } from "@/data/empresas";
-import listarVagas from "@/lib/api";
+import { listarVagas, listarEmpresas } from "@/lib/api";
 
 export default async function Home() {
-  const vagas = await listarVagas();
+  /* Nenhum array importado de dentro do projeto: os dois vêm do lib/api, que
+     é o único lugar que conhece a fonte. Em paralelo, porque um não depende
+     do outro. */
+  const [vagas, empresas] = await Promise.all([listarVagas(), listarEmpresas()]);
 
-  // Duas contas no servidor. Números que a página não precisa lembrar,
-  // só mostrar — então não são estado, são conta.
-  const paraIniciante = vagas.filter((v) => v.aceitaIniciante).length;
+  // Conta no servidor. Número que a página só mostra não é estado, é conta.
+  const paraIniciante = vagas.filter((vaga) => vaga.aceitaIniciante).length;
 
   return (
     <section>
       <h1>Vagas de tecnologia para quem está migrando</h1>
       <p>
-        O Leque de Vagas reúne oportunidades de início de carreira em times
-        que aceitam quem está começando. São {vagas.length} vagas abertas de{" "}
+        O Leque de Vagas reúne oportunidades de início de carreira em times que
+        aceitam quem está começando. São {vagas.length} vagas abertas de{" "}
         {empresas.length} empresas, e {paraIniciante} delas não exigem
         experiência anterior.
       </p>
 
       <p>
         <Link href="/vagas">Ver as vagas abertas →</Link>
+        {" · "}
+        <Link href="/empresas">Conhecer as empresas</Link>
       </p>
     </section>
   );

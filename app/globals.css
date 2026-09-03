@@ -154,3 +154,38 @@ a { color: inherit; }
   clip-path: inset(50%);
   white-space: nowrap;
 }
+
+/* ---------- esperas visíveis (aula 04) ----------
+   O dado passou a vir de fora, e com isso apareceu a espera. Todo esqueleto
+   daqui existe para ocupar MAIS OU MENOS a altura do conteúdo real: se o
+   fallback é menor, a página pula quando o dado chega, e o dedo de quem já ia
+   clicar acerta outra coisa. */
+
+.esqueleto { display: grid; gap: 10px; }
+
+.barra {
+  height: 16px;
+  border-radius: 6px;
+  background: #18181b;
+  animation: pulsa 1.2s ease-in-out infinite;
+}
+.barra.titulo { height: 30px; max-width: 60%; }
+.barra.curta { max-width: 35%; }
+
+.cartao-esqueleto {
+  height: 76px;
+  border-radius: 12px;
+  background: #18181b;
+  animation: pulsa 1.2s ease-in-out infinite;
+}
+
+/* O fallback dos números: mesma altura da linha real, para a listagem de
+   baixo não se mexer no instante em que a contagem chega. */
+.numeros.esqueleto {
+  display: block;
+  height: 22px;
+  max-width: 320px;
+  border-radius: 6px;
+  background: #18181b;
+  animation: pulsa 1.2s ease-in-out infinite;
+}

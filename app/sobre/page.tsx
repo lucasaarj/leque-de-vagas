@@ -15,9 +15,16 @@ export default function Sobre() {
         ensinado, e nada além dele.
       </p>
       <p>
-        Nesta versão os dados moram dentro do próprio repositório, em{" "}
-        <code>data/vagas.ts</code>. Na aula 04 eles passam a vir de fora, e é
-        aí que aparece uma coisa que o projeto ainda não tem: a espera.
+        Os dados saíram de dentro do código na aula 04: hoje eles são{" "}
+        <code>dados/vagas.json</code> e <code>dados/empresas.json</code>,
+        buscados por rede. Um único arquivo conhece esse endereço,{" "}
+        <code>lib/api.ts</code> — nenhuma página escreve <code>fetch</code>.
+      </p>
+      <p>
+        Foi essa troca que trouxe a <strong>espera</strong> para o projeto, e
+        com ela os esqueletos de carregamento, o <code>Suspense</code> em volta
+        dos blocos que buscam, e a diferença entre uma vaga que não existe e
+        uma rede que caiu.
       </p>
     </section>
   );
