@@ -1,33 +1,25 @@
 import type { Metadata } from "next";
-import { Space_Grotesk, JetBrains_Mono } from "next/font/google";
+import Cabecalho from "@/components/Cabecalho";
 import "./globals.css";
-import Navbar from "@/components/navbar/page";
 
-const spaceGrotesk = Space_Grotesk({
-  variable: "--font-space-grotesk",
-  subsets: ["latin"],
-});
-
-const jetBrainsMono = JetBrains_Mono({
-  variable: "--font-jetbrains-mono",
-  subsets: ["latin"],
-});
-
+// Vira <title> e <meta name="description"> sozinho.
 export const metadata: Metadata = {
   title: "Leque de Vagas",
-  description:
-    "Mural de vagas em tech para quem está entrando na área agora: estágio, júnior e remoto em destaque.",
+  description: "Vagas de tecnologia para quem está migrando de carreira",
 };
 
-export default function RootLayout({ children }: LayoutProps<"/">) {
+export default function RootLayout({
+  children,
+}: {
+  children: React.ReactNode;
+}) {
   return (
-    <html
-      lang="pt-BR"
-      className={`${spaceGrotesk.variable} ${jetBrainsMono.variable}`}
-    >
+    // lang="pt-BR" importa: o leitor de tela usa para escolher a voz
+    <html lang="pt-BR">
       <body>
-        <Navbar />
-        <main className="lv-principal">{children}</main>
+        <Cabecalho />
+        <main className="conteudo">{children}</main>
+        <footer className="rodape">Leque de Vagas · 2026</footer>
       </body>
     </html>
   );

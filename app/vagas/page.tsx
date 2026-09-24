@@ -1,20 +1,43 @@
-import Botao from "@/components/botao/botao";
+import { Suspense } from "react";
+import { listarVagas } from "@/lib/api";
+import MuralDeVagas from "@/components/MuralDeVagas";
+import NumerosDoCatalogo from "@/components/NumerosDoCatalogo";
+import NumerosEsqueleto from "@/components/NumerosEsqueleto";
+import ListaEsqueleto from "@/components/ListaEsqueleto";
 
-// Placeholder: esta rota existe só para o link do cabeçalho não quebrar.
-// A tela "Vagas · 1440" do Figma (node 14:88) ainda não foi implementada.
+/**
+ * Repare no que ESTA página não é: `async`.
+ *
+ * Se ela fosse, esperaria antes de mandar qualquer coisa — e aí nem o `<h1>`
+ * chegaria cedo. Quem busca são os filhos, cada um dentro do seu `<Suspense>`,
+ * e por isso o título aparece na hora enquanto os dois blocos ficam prontos
+ * cada um no seu tempo. São dois `<Suspense>` de propósito: com um só, o bloco
+ * mais lento seguraria o outro.
+ */
 export default function Vagas() {
   return (
-    <div className="lv-pagina">
-      <div className="lv-container lv-pagina__conteudo">
-        <p className="lv-eyebrow">MURAL COMPLETO</p>
-        <h1 className="lv-titulo">
-          Todas as <span className="lv-texto-gradiente">vagas</span>
-        </h1>
-        <p className="lv-lead">Em construção.</p>
-        <Botao tipo="secundario" href="/sobre">
-          Ver a trilha do projeto
-        </Botao>
-      </div>
-    </div>
+    <>
+      <h1>Vagas</h1>
+
+      <Suspense fallback={<NumerosEsqueleto />}>
+        <NumerosDoCatalogo />
+      </Suspense>
+
+      <Suspense fallback={<ListaEsqueleto />}>
+        <ListagemDeVagas />
+      </Suspense>
+    </>
   );
+}
+
+/**
+ * O componente que embrulha o mural da aula 03: ele busca, o mural filtra.
+ *
+ * O MuralDeVagas continua sendo de CLIENTE e continua com os filtros no
+ * `useState` — a aula 03 fica inteira de pé. O que mudou é só de onde vem a
+ * lista que ele recebe por prop.
+ */
+async function ListagemDeVagas() {
+  const vagas = await listarVagas();
+  return <MuralDeVagas vagas={vagas} />;
 }

@@ -1,252 +1,191 @@
-@import "tailwindcss";
-
-/* ==========================================================================
-   Leque de Vagas — tokens do Design System (Figma)
-   Fonte: figma.com/design/26JfXsNuYhG2YShfxER2Xv — "Design System · Telas"
-   ========================================================================== */
-
-:root {
-  color-scheme: dark;
-
-  /* Superfícies */
-  --bg: #08070e;
-  --surface: #100d1b;
-
-  /* Texto */
-  --text: #f3f0fa;
-  --text-2: #b4aec6;
-  --text-4: #847c9b;
-
-  /* Marca */
-  --magenta: #f24487;
-  /* usado no gradiente do botão primário: garante 4.51:1 com texto branco */
-  --magenta-fundo: #d33b75;
-  --roxo: #7b4fd0;
-  --pink-light: #e88bb8;
-  --purple-light: #a98ce0;
-
-  /* Linhas */
-  --line: rgba(255, 255, 255, 0.09);
-  --line-controle: rgba(255, 255, 255, 0.36);
-
-  /* Raios */
-  --raio-pill: 100px;
-  --raio-card: 16px;
-
-  /* Gradientes */
-  --gradiente-marca: linear-gradient(
-    126.67deg,
-    var(--magenta-fundo) 0%,
-    var(--roxo) 86.957%
-  );
-  --gradiente-texto: linear-gradient(
-    90deg,
-    var(--magenta) 0%,
-    var(--roxo) 100%
-  );
-
-  /* Tipografia */
-  --fonte-sans: var(--font-space-grotesk), ui-sans-serif, system-ui, sans-serif;
-  --fonte-mono: var(--font-jetbrains-mono), ui-monospace, "SFMono-Regular",
-    monospace;
-
-  /* Layout — no Figma o corpo tem 170px de recuo em 1440px, o que dá 1100px úteis */
-  --largura-conteudo: 1100px;
-  --gutter: 24px;
-  --altura-cabecalho: 66px;
-}
-
-/* Ponte de tokens para o dia em que o Tailwind entrar no projeto.
-   Não é usada por nenhum componente nosso — todo o estilo daqui é CSS puro.
-   Hoje só atende as classes que sobraram do boilerplate em app/page.tsx. */
-@theme inline {
-  --color-bg: var(--bg);
-  --color-surface: var(--surface);
-  --color-text: var(--text);
-  --color-text-2: var(--text-2);
-  --color-text-4: var(--text-4);
-  --color-magenta: var(--magenta);
-  --color-roxo: var(--roxo);
-  --color-pink-light: var(--pink-light);
-  --color-purple-light: var(--purple-light);
-  --color-line: var(--line);
-  --color-line-controle: var(--line-controle);
-
-  /* mantidos para não quebrar as classes do boilerplate (bg-foreground etc.) */
-  --color-background: var(--bg);
-  --color-foreground: var(--text);
-
-  --font-sans: var(--fonte-sans);
-  --font-mono: var(--fonte-mono);
-}
-
-/* ==========================================================================
-   Reset — próprio, para o estilo não depender do preflight do Tailwind
-   ========================================================================== */
-
-*,
-*::before,
-*::after {
-  box-sizing: border-box;
-  margin: 0;
-}
-
-img,
-svg {
-  display: block;
-  max-width: 100%;
-}
-
-a {
-  color: inherit;
-}
-
-button,
-input,
-textarea,
-select {
-  font: inherit;
-  color: inherit;
-}
-
-/* ==========================================================================
-   Base
-   ========================================================================== */
-
-html {
-  height: 100%;
-}
+/* CSS comum, sem framework: Tailwind só entra na aula 08 do curso.
+   Uma folha só para o projeto inteiro, com classes que as páginas usam por
+   nome — o suficiente para a tela não atrapalhar quem está aprendendo. */
 
 body {
-  min-height: 100%;
+  margin: 0;
+  min-height: 100vh;
+  background: #09090b;
+  color: #fafafa;
+  font-family: system-ui, sans-serif;
+  line-height: 1.6;
+}
+
+a { color: inherit; }
+
+/* ---------- moldura ---------- */
+
+.cabecalho {
   display: flex;
-  flex-direction: column;
-  background-color: var(--bg);
-  color: var(--text);
-  font-family: var(--fonte-sans);
-  -webkit-font-smoothing: antialiased;
+  gap: 16px;
+  align-items: center;
+  padding: 16px;
+  border-bottom: 1px solid #27272a;
+  flex-wrap: wrap;
 }
+.cabecalho nav { display: flex; gap: 12px; flex-wrap: wrap; }
 
-/* O <main> ocupa o espaço que sobra abaixo do cabeçalho */
-.lv-principal {
-  flex: 1;
-}
+.menu-link { color: #a1a1aa; text-decoration: none; }
+.menu-link.ativo { color: #fafafa; font-weight: 600; }
 
-::selection {
-  background-color: rgba(242, 68, 135, 0.32);
-  color: var(--text);
-}
+.conteudo { max-width: 720px; margin: 0 auto; padding: 32px 16px; }
+.rodape { padding: 16px; border-top: 1px solid #27272a; color: #a1a1aa; }
 
-/* Anel de foco do Design System: 2px roxo-claro, afastado 3px (7.18:1) */
-:where(a, button, input, textarea, select, summary, [tabindex]):focus-visible {
-  outline: 2px solid var(--purple-light);
-  outline-offset: 3px;
-}
-
-@media (prefers-reduced-motion: reduce) {
-  *,
-  *::before,
-  *::after {
-    transition-duration: 0.01ms !important;
-    animation-duration: 0.01ms !important;
-    animation-iteration-count: 1 !important;
-  }
-}
-
-/* ==========================================================================
-   Primitivos compartilhados
-   ========================================================================== */
-
-/* Faixa de conteúdo: 1100px úteis, com respiro nas telas menores */
-.lv-container {
-  width: 100%;
-  max-width: calc(var(--largura-conteudo) + var(--gutter) * 2);
-  margin-inline: auto;
-  padding-inline: var(--gutter);
-}
-
-/* Casca de página: mesmo recuo vertical e mesmo empilhamento em toda tela.
-   Combine com .lv-container no filho. */
-.lv-pagina {
-  padding-block: 56px 80px;
-}
-
-@media (max-width: 640px) {
-  .lv-pagina {
-    padding-block: 40px 56px;
-  }
-}
-
-.lv-pagina__conteudo {
-  display: flex;
-  flex-direction: column;
-  align-items: flex-start;
-  gap: 20px;
-}
-
-/* ==========================================================================
-   Tipografia — comum a todas as páginas
-   ========================================================================== */
-
-/* Rótulos em mono rosa: o eyebrow abre a página, o rótulo abre uma seção */
-.lv-eyebrow,
-.lv-rotulo-secao {
-  font-family: var(--fonte-mono);
-  font-weight: 400;
-  line-height: normal;
-  color: var(--pink-light);
-}
-
-.lv-eyebrow {
-  font-size: 12.5px;
-}
-
-.lv-rotulo-secao {
-  font-size: 15px;
-}
-
-/* Título de página. No Figma: 48px na Sobre e 46px nas Vagas — normalizei em 48px,
-   porque 2px não é uma decisão de design. O tracking é sempre -0.03em (-1.44px/48). */
-.lv-titulo {
-  font-size: clamp(32px, 5vw, 48px);
-  font-weight: 700;
-  line-height: 1.06;
-  letter-spacing: -0.03em;
-  color: var(--text);
-}
-
-/* O hero da Home é maior e fecha mais o tracking (62px / -2.17px) */
-.lv-titulo--hero {
-  font-size: clamp(38px, 6.5vw, 62px);
-  line-height: 1.04;
-  letter-spacing: -0.035em;
-}
-
-/* Parágrafo de apoio logo abaixo do título */
-.lv-lead {
-  max-width: 760px;
-  font-size: 19px;
-  font-weight: 400;
-  line-height: normal;
-  color: var(--text-2);
-}
-
-/* Nota discreta de rodapé */
-.lv-nota {
-  font-family: var(--fonte-mono);
+.secao {
+  text-transform: uppercase;
+  letter-spacing: .08em;
   font-size: 12px;
-  font-weight: 400;
-  line-height: normal;
-  color: var(--text-4);
+  color: #a1a1aa;
 }
 
-/* Trecho de texto com o gradiente da marca */
-.lv-texto-gradiente {
-  background-image: var(--gradiente-texto);
-  -webkit-background-clip: text;
-  background-clip: text;
-  color: transparent;
+/* ---------- listas de vaga ---------- */
+
+.lista { list-style: none; padding: 0; display: grid; gap: 12px; }
+.lista li a {
+  display: block;
+  padding: 14px 16px;
+  border: 1px solid #27272a;
+  border-radius: 12px;
+  text-decoration: none;
+  color: inherit;
+}
+.lista li a:hover { border-color: #52525b; }
+.lista li a span { display: block; color: #a1a1aa; font-size: 14px; }
+
+.selo {
+  display: inline-block;
+  font-size: 13px;
+  padding: 4px 10px;
+  border-radius: 999px;
+  background: #14532d;
+  color: #bbf7d0;
 }
 
-/* O botão (.btn / .btn-primario / .btn-secundario) mora em
-   components/botao/botao.css, junto do componente que o usa. */
+.numeros { color: #a1a1aa; font-size: 14px; }
+
+/* ---------- filtros e abas (aula 03) ---------- */
+
+.filtros { display: grid; gap: 12px; margin: 16px 0; }
+.filtros input {
+  padding: 10px 12px;
+  border: 1px solid #27272a;
+  border-radius: 10px;
+  background: #18181b;
+  color: inherit;
+  font: inherit;
+}
+
+.chips { list-style: none; padding: 0; display: flex; flex-wrap: wrap; gap: 8px; }
+.chip, .chips li {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 6px 12px;
+  border: 1px solid #27272a;
+  border-radius: 999px;
+  background: transparent;
+  color: #a1a1aa;
+  font: inherit;
+  cursor: pointer;
+}
+.chip.ativo { border-color: #fafafa; color: #fafafa; }
+
+.abas { display: flex; gap: 8px; margin: 16px 0; }
+.aba {
+  padding: 8px 14px;
+  border: 1px solid #27272a;
+  border-radius: 10px;
+  background: transparent;
+  color: #a1a1aa;
+  font: inherit;
+  cursor: pointer;
+}
+.aba.ativa { border-color: #fafafa; color: #fafafa; font-weight: 600; }
+
+/* ---------- descrição e formulário (aula 03) ---------- */
+
+.descricao button, .formulario button, .aviso button, .ok button {
+  margin-top: 8px;
+  padding: 8px 14px;
+  border: 1px solid #3f3f46;
+  border-radius: 10px;
+  background: transparent;
+  color: inherit;
+  font: inherit;
+  cursor: pointer;
+}
+.formulario button:disabled { opacity: .5; cursor: not-allowed; }
+
+.formulario { display: grid; gap: 12px; margin-top: 8px; }
+.formulario label { display: grid; gap: 4px; font-size: 14px; color: #a1a1aa; }
+.formulario input {
+  padding: 10px 12px;
+  border: 1px solid #27272a;
+  border-radius: 10px;
+  background: #18181b;
+  color: #fafafa;
+  font: inherit;
+}
+
+.erro { color: #fda4af; font-size: 14px; margin: 0; }
+.ok { padding: 16px; border: 1px solid #14532d; border-radius: 12px; }
+
+/* ---------- avisos, espera e texto legal ---------- */
+
+.aviso { padding: 24px; border: 1px dashed #3f3f46; border-radius: 12px; }
+.tecnico { font-family: ui-monospace, monospace; font-size: 12px; color: #71717a; }
+
+.skeleton {
+  height: 72px;
+  border-radius: 12px;
+  background: #18181b;
+  animation: pulsa 1.2s ease-in-out infinite;
+}
+@keyframes pulsa { 50% { opacity: .5; } }
+
+.texto-legal { max-width: 60ch; }
+
+/* Rótulo que existe para o leitor de tela e não para os olhos. */
+.sr-only {
+  position: absolute;
+  width: 1px; height: 1px;
+  padding: 0; margin: -1px;
+  overflow: hidden;
+  clip-path: inset(50%);
+  white-space: nowrap;
+}
+
+/* ---------- esperas visíveis (aula 04) ----------
+   O dado passou a vir de fora, e com isso apareceu a espera. Todo esqueleto
+   daqui existe para ocupar MAIS OU MENOS a altura do conteúdo real: se o
+   fallback é menor, a página pula quando o dado chega, e o dedo de quem já ia
+   clicar acerta outra coisa. */
+
+.esqueleto { display: grid; gap: 10px; }
+
+.barra {
+  height: 16px;
+  border-radius: 6px;
+  background: #18181b;
+  animation: pulsa 1.2s ease-in-out infinite;
+}
+.barra.titulo { height: 30px; max-width: 60%; }
+.barra.curta { max-width: 35%; }
+
+.cartao-esqueleto {
+  height: 76px;
+  border-radius: 12px;
+  background: #18181b;
+  animation: pulsa 1.2s ease-in-out infinite;
+}
+
+/* O fallback dos números: mesma altura da linha real, para a listagem de
+   baixo não se mexer no instante em que a contagem chega. */
+.numeros.esqueleto {
+  display: block;
+  height: 22px;
+  max-width: 320px;
+  border-radius: 6px;
+  background: #18181b;
+  animation: pulsa 1.2s ease-in-out infinite;
+}
