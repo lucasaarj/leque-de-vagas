@@ -9,8 +9,6 @@ export default function BotaoCopiarLink({ titulo }: { titulo: string }) {
     <button
       type="button"
       onClick={() => {
-        // location e navigator só existem no navegador.
-        // É a segunda razão de este arquivo ser de cliente.
         navigator.clipboard.writeText(location.href);
         setCopiado(true);
       }}
