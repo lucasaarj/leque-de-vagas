@@ -3,21 +3,15 @@
 import { useState } from "react";
 import Filtros from "./Filtros";
 import CardDeVaga from "./CardDeVaga";
-import { Vaga } from "@/lib/tipos";
+import type { Vaga } from "@/data/vagas";
 
 export default function MuralDeVagas({ vagas }: { vagas: Vaga[] }) {
-  // O estado mora AQUI, no pai comum dos filtros e da lista. Dois
-  // componentes precisam da busca: quem mora sozinho não serve.
   const [busca, setBusca] = useState("");
   const [area, setArea] = useState("Todas");
-
-  // Estado derivado: recalculado a cada renderização, nunca guardado.
-  // new Set tira os repetidos; o espalhamento devolve array de novo.
   const areas = ["Todas", ...new Set(vagas.map((v) => v.area))];
 
   const visiveis = vagas.filter((vaga) => {
     const termo = busca.toLowerCase();
-    // tudo minúsculo dos dois lados: quem busca "React" acha "react"
     const bateBusca =
       vaga.titulo.toLowerCase().includes(termo) ||
       vaga.empresa.toLowerCase().includes(termo);
@@ -25,7 +19,6 @@ export default function MuralDeVagas({ vagas }: { vagas: Vaga[] }) {
     return bateBusca && bateArea;
   });
 
-  // Mais uma conta. Muda sozinha quando visiveis muda.
   const aceitamIniciante = visiveis.filter((v) => v.aceitaIniciante).length;
 
   return (
